@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+    <h1>Cambio de imágenes con JavaScript</h1>
+
+    <img id="myFPImage"
+         onclick="cambiaPic()"
+         src="https://t3.ftcdn.net/jpg/20/06/67/56/360_F_2006675607_ixm8iJAIgJlU2sv0QtxO4nALEr68ONW8.jpg"
+         width="500"
+         height="580">
+
+    <p>Haz click sobre la imagen para cambiarla.</p>
+
+    <script>
+        function cambiaPic() {
+            var image = document.getElementById("myFPImage");
+
+            if (image.src.includes("mediotiempo")) {
+                image.src = "https://t3.ftcdn.net/jpg/20/06/67/56/360_F_2006675607_ixm8iJAIgJlU2sv0QtxO4nALEr68ONW8.jpg";
+            } else {
+                image.src = "https://cdn2.mediotiempo.com/uploads/media/2020/07/05/memes-laliga-real-madrid-gana-9.jpg";
+            }
+        }
+    </script>
+
+</body>
+</html>

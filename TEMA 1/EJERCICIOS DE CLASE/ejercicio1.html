@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Prueba de Métodos de Salida en JavaScript</h1>
+
+<p id="prueba">Contenido previo...</p>
+
+<button type="button"
+        onclick="window.alert('Hola, esta ventana es de alerta')">
+    1.Ventana alerta
+</button>
+
+<button type="button"
+        onclick="console.log('Mensaje de consola: Hola')">
+    2. Mensaje en consola
+</button>
+
+<button type="button"
+        onclick="document.getElementById('prueba').innerHTML = 'Cambia con el innerHTML'">
+    3.Modificar DOM (innerHTML)
+</button>
+
+<button type="button"
+        onclick="document.write('Esto es lo del document.write')">
+    4.Document Write
+</button>
+
+</body>
+</html>
