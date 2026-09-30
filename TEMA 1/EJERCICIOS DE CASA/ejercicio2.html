@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Cambio de imágenes con JavaScript</h1>
+
+<img id="myFPImage"
+     onclick="cambiaImagen()"
+     src="https://static.vecteezy.com/system/resources/previews/010/994/249/non_2x/real-madrid-logo-symbol-design-spain-football-european-countries-football-teams-illustration-free-vector.jpg"
+     width="500"
+     height="580">
+
+<p>Haz click sobre la imagen para cambiarla.</p>
+
+<script>
+
+function cambiaImagen() {
+
+    var image = document.getElementById("myFPImage");
+
+    if (image.src.includes("https://static.vecteezy.com/system/resources/previews/010/994/249/non_2x/real-madrid-logo-symbol-design-spain-football-european-countries-football-teams-illustration-free-vector.jpg")) {
+        image.src = "https://cdn2.mediotiempo.com/uploads/media/2020/07/05/memes-laliga-real-madrid-gana-9.jpg";
+    }
+    else if (image.src.includes("https://cdn2.mediotiempo.com/uploads/media/2020/07/05/memes-laliga-real-madrid-gana-9.jpg")) {
+        image.src = "https://pic2-cdn.creality.com/comp/model/51fd31c86da156d799045587208662c2.webp";
+    }
+    else if (image.src.includes("https://pic2-cdn.creality.com/comp/model/51fd31c86da156d799045587208662c2.webp")) {
+        image.src = "https://i.pinimg.com/564x/20/53/cf/2053cf39ad4edb77acfdb0f565d8f843.jpg";
+    }
+    else {
+        image.src = "https://static.vecteezy.com/system/resources/previews/010/994/249/non_2x/real-madrid-logo-symbol-design-spain-football-european-countries-football-teams-illustration-free-vector.jpg";
+    }
+
+}
+
+</script>
+
+</body>
+</html>
