@@ -1,10 +1,166 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Mi sitio</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mis ejercicios de Cliente</title>
+<style>
+  :root {
+    --fondo: #f5f6f8;
+    --tarjeta: #ffffff;
+    --texto: #1d2433;
+    --suave: #6b7385;
+    --linea: #e1e4ea;
+    --acento: #2f5bea;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fondo: #14171f;
+      --tarjeta: #1c2029;
+      --texto: #e8eaf0;
+      --suave: #9097a8;
+      --linea: #2c3240;
+      --acento: #7b9bff;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--fondo);
+    color: var(--texto);
+    font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  main { max-width: 760px; margin: 0 auto; padding: 56px 20px 80px; }
+  h1 { font-size: 2rem; margin: 0 0 4px; letter-spacing: -0.02em; }
+  .sub { color: var(--suave); margin: 0 0 28px; }
+  #buscar {
+    width: 100%;
+    padding: 11px 14px;
+    font: inherit;
+    color: inherit;
+    background: var(--tarjeta);
+    border: 1px solid var(--linea);
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  #buscar:focus-visible, a:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--acento);
+    outline-offset: 2px;
+  }
+  .caja {
+    background: var(--tarjeta);
+    border: 1px solid var(--linea);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  ul { list-style: none; margin: 0; padding: 0; }
+  li + li, details + li, li + details, details + details { border-top: 1px solid var(--linea); }
+  a {
+    display: block;
+    padding: 12px 16px;
+    color: var(--texto);
+    text-decoration: none;
+  }
+  a:hover { background: var(--fondo); color: var(--acento); }
+  summary {
+    padding: 12px 16px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  summary:hover { background: var(--fondo); }
+  details > ul { border-top: 1px solid var(--linea); padding-left: 16px; }
+  details details > summary { padding-left: 16px; }
+  .vacio { padding: 20px 16px; color: var(--suave); }
+</style>
 </head>
 <body>
-  <h1>Hola mundo</h1>
+<main>
+  <h1>Mis ejercicios de Cliente</h1>
+  <p class="sub">Elige un archivo para abrirlo.</p>
+  <input id="buscar" type="search" placeholder="Buscar archivo" aria-label="Buscar archivo">
+  <div class="caja" id="lista"><p class="vacio">Cargando...</p></div>
+</main>
+<script>
+  const USUARIO = "Ivan200777";
+  const REPO = "CLIENTE";
+  const RAMA = "main";
+  const IGNORAR = ["index.html", ".nojekyll", "README.md"];
+ 
+  const lista = document.getElementById("lista");
+  const buscar = document.getElementById("buscar");
+ 
+  const ordenar = (a, b) => a.localeCompare(b, "es", { numeric: true, sensitivity: "base" });
+ 
+  function construirArbol(rutas) {
+    const raiz = { carpetas: {}, archivos: [] };
+    for (const ruta of rutas) {
+      const partes = ruta.split("/");
+      let nodo = raiz;
+      for (const parte of partes.slice(0, -1)) {
+        nodo.carpetas[parte] ??= { carpetas: {}, archivos: [] };
+        nodo = nodo.carpetas[parte];
+      }
+      nodo.archivos.push(ruta);
+    }
+    return raiz;
+  }
+ 
+  function pintar(nodo) {
+    const ul = document.createElement("ul");
+    for (const nombre of Object.keys(nodo.carpetas).sort(ordenar)) {
+      const li = document.createElement("li");
+      const det = document.createElement("details");
+      const sum = document.createElement("summary");
+      sum.textContent = nombre;
+      det.append(sum, pintar(nodo.carpetas[nombre]));
+      li.append(det);
+      ul.append(li);
+    }
+    for (const ruta of nodo.archivos.sort(ordenar)) {
+      const li = document.createElement("li");
+      const a = document.createElement("a");
+      a.href = ruta.split("/").map(encodeURIComponent).join("/");
+      a.textContent = ruta.split("/").pop();
+      li.append(a);
+      ul.append(li);
+    }
+    return ul;
+  }
+ 
+  function filtrar() {
+    const q = buscar.value.trim().toLowerCase();
+    lista.querySelectorAll("li").forEach(li => {
+      const a = li.querySelector(":scope > a");
+      if (a) li.hidden = q && !a.textContent.toLowerCase().includes(q);
+    });
+    lista.querySelectorAll("details").forEach(det => {
+      const hay = det.querySelector("li:not([hidden]) > a");
+      det.parentElement.hidden = !hay && q !== "";
+      if (q && hay) det.open = true;
+    });
+  }
+ 
+  fetch(`https://api.github.com/repos/${USUARIO}/${REPO}/git/trees/${RAMA}?recursive=1`)
+    .then(r => {
+      if (!r.ok) throw new Error(r.status);
+      return r.json();
+    })
+    .then(datos => {
+      const rutas = datos.tree
+        .filter(f => f.type === "blob")
+        .map(f => f.path)
+        .filter(p => !IGNORAR.includes(p) && !p.startsWith(".") && /\.(html?|pdf|txt|md)$/i.test(p));
+      if (!rutas.length) {
+        lista.innerHTML = '<p class="vacio">No hay archivos todavía.</p>';
+        return;
+      }
+      lista.replaceChildren(pintar(construirArbol(rutas)));
+    })
+    .catch(() => {
+      lista.innerHTML = '<p class="vacio">No se pudo cargar la lista. Recarga la página en unos minutos.</p>';
+    });
+ 
+  buscar.addEventListener("input", filtrar);
+</script>
 </body>
 </html>
