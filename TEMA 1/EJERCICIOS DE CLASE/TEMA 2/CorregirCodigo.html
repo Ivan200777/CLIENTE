@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Tema 2 - Eventos con Listener</title>
+</head>
+<body>
+
+  <h2>Eventos con addEventListener</h2>
+
+  <!-- EVENTOS DE RATÓN -->
+
+  <p id="myTexto">texto a modificar</p>
+  <button id="myboton">Dale fuerte!</button>
+
+  <br><br>
+
+  <div id="caja" style="background: #e2e8f0; padding: 10px; width: 250px;">
+    2. Pasa el ratón por encima de esta caja
+  </div>
+
+  <hr>
+
+  <!-- EVENTOS DE TEXTO / TECLADO -->
+
+  <label>3. Escribe tu nombre (input):</label><br>
+  <input type="text" id="nombre">
+
+  <br><br>
+
+  <label>4. Escribe un texto (keyup):</label><br>
+  <input type="text" id="texto">
+
+  <p id="salida"></p>
+
+  <script>
+
+    function alHacerClic() {
+      var x = document.getElementById("myTexto");
+      x.innerHTML = "¡Has hecho clic en el botón!";
+    }
+
+    function alPasarElRaton() {
+      var x = document.getElementById("caja");
+      x.innerHTML = "¡El ratón está sobre la caja!";
+    }
+
+    function alEscribirTexto() {
+      var x = document.getElementById("nombre");
+      var salida = document.getElementById("salida");
+      salida.innerHTML = "Nombre en tiempo real: " + x.value;
+    }
+
+    function alSoltarTecla() {
+      var x = document.getElementById("texto");
+      console.log("Número de caracteres: " + x.value.length);
+    }
+
+    // EVENTOS CON addEventListener
+
+    document.getElementById("myboton").addEventListener("click", alHacerClic, false);
+
+    document.getElementById("caja").addEventListener("mouseover", alPasarElRaton, false);
+
+    document.getElementById("nombre").addEventListener("input", alEscribirTexto, false);
+
+    document.getElementById("texto").addEventListener("keyup", alSoltarTecla, false);
+
+  </script>
+
+</body>
+</html>
