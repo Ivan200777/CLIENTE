@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Ejercicio 9</title>
+</head>
+<body>
+
+    <h1>Ejercicio 9</h1>
+
+    <script>
+        var milista = ["panadero", 456, [0, 1, 2]];
+
+        console.log(milista);
+        console.log(milista[2][2]);
+
+        document.write("Contenido del array:<br>");
+        document.write(milista[0] + "<br>");
+        document.write(milista[1] + "<br>");
+        document.write(milista[2] + "<br>");
+        document.write("milista[2][2] = " + milista[2][2]);
+    </script>
+
+</body>
+</html>
+
+//sí se puede porque JavaScript permite guardar diferentes tipos de datos dentro de un mismo array, 
+//incluso otro array. milista[2][2] accede al array [0, 1, 2] y después a su posición 2, que es 2.

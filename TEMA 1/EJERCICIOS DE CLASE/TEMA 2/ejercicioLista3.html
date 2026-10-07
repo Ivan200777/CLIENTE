@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Ejercicio 3</title>
+</head>
+<body>
+
+    <h1>Ejercicio 3</h1>
+
+    <script>
+        var dato = "Ronaldo " + 5 + 5;
+        console.log(dato);
+
+        // Resultado: Ronaldo 55
+        // Como primero hay un texto, los números se unen al texto
+        // en vez de sumarse.
+
+        var dato = 5 + 5 + " Ronaldo ";
+        console.log(dato);
+
+        // Resultado: 10 Ronaldo
+        // Primero se suman los dos números y después se unen al texto.
+    </script>
+
+    <h2>Explicación</h2>
+
+    <p>
+        En el primer caso sale "Ronaldo 55" porque al haber un texto
+        primero, los números se juntan con el texto.
+    </p>
+
+    <p>
+        En el segundo caso sale "10 Ronaldo" porque primero se hace
+        la suma de 5 + 5 y después se junta el resultado con el texto.
+    </p>
+
+</body>
+</html>
