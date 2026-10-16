@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boletín de notas</title>
+
+    <style>
+    body {
+        background-color: #f0f5ff;
+    }
+   h1 {
+    text-align: center;
+}
+#tituloNotas {
+    text-align: left;
+}
+.centrado {
+    text-align: center;
+}
+    fieldset {
+        width: 70%;
+        margin: 20px auto;
+        padding: 1cm;
+        box-sizing: border-box;
+        background-color: white;
+    }
+    table {
+        width: 100%;
+        text-align: center;
+    }
+    td, th {
+        padding: 8px;
+    }
+    thead th {
+        background-color: #b6ceff;
+        color: black;
+    }
+    .aprobado {
+        background-color: #a8d5a2;
+    }
+    .suspenso {
+        background-color: #e8a0a0;
+    }
+    .form-fila {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+    .form-fila input[type="number"] {
+        width: 60px;
+    }
+    button {
+        color: white;
+        border: none;
+        padding: 6px 14px;
+        cursor: pointer;
+    }
+    #btnAnadir {
+        background-color: #1e6fe0;
+    }
+    #btnReset {
+        background-color: #7f9cc9;
+        margin-top: 15px;
+    }
+    #mensaje {
+        margin-top: 15px;
+        text-align: center;
+    }
+    </style>
+</head>
+<body>
+    <h1>Boletín de notas de la clase</h1>
+
+    <fieldset>
+        <h3>Notas por trimestre</h3>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Alumno</th>
+                    <th>1T</th>
+                    <th>2T</th>
+                    <th>3T</th>
+                    <th>Media</th>
+                    <th>Calificacion</th>
+                </tr>
+            </thead>
+            <tbody id="cuerpo">
+                <tr>
+                    <td>Ana</td>
+                    <td class="aprobado">7</td>
+                    <td class="aprobado">8</td>
+                    <td class="aprobado">9</td>
+                    <th>8.00</th>
+                    <td>Notable</td>
+                </tr>
+                <tr>
+                    <td>Luis</td>
+                    <td class="suspenso">4</td>
+                    <td class="aprobado">5</td>
+                    <td class="aprobado">6</td>
+                    <th>5.00</th>
+                    <td>Suficiente</td>
+                </tr>
+                <tr>
+                    <td>Marta</td>
+                    <td class="suspenso">3</td>
+                    <td class="suspenso">4</td>
+                    <td class="suspenso">2</td>
+                    <th>3.00</th>
+                    <td>Insuficiente</td>
+                </tr>
+                <tr>
+                    <td>Pablo</td>
+                    <td class="aprobado">9</td>
+                    <td class="aprobado">10</td>
+                    <td class="aprobado">9</td>
+                    <th>9.33</th>
+                    <td>Sobresaliente</td>
+                </tr>
+                <tr>
+                    <td>Sara</td>
+                    <td class="aprobado">5</td>
+                    <td class="suspenso">4</td>
+                    <td class="aprobado">6</td>
+                    <th>5.00</th>
+                    <td>Suficiente</td>
+                </tr>
+                <tr>
+                    <td>Lamin</td>
+                    <td class="suspenso">3</td>
+                    <td class="suspenso">4</td>
+                    <td class="suspenso">3</td>
+                    <th>3.33</th>
+                    <td>Insuficiente</td>
+                </tr>
+                <tr>
+                    <td>Joselito</td>
+                    <td class="suspenso">3</td>
+                    <td class="suspenso">4</td>
+                    <td class="suspenso">3</td>
+                    <th>3.33</th>
+                    <td>Insuficiente</td>
+                </tr>
+            </tbody>
+        </table>
+    </fieldset>
+
+    <fieldset>
+        <h3>Añadir Alumno</h3>
+        <div class="form-fila">
+            <label>Nombre: <input type="text" id="nombre"></label>
+            <label>1T: <input type="number" id="t1" min="0" max="10" step="any"></label>
+            <label>2T: <input type="number" id="t2" min="0" max="10" step="any"></label>
+            <label>3T: <input type="number" id="t3" min="0" max="10" step="any"></label>
+            <button id="btnAnadir">Añadir</button>
+        </div>
+        <div class="form-fila">
+            <button id="btnReset">Volver a los datos iniciales</button>
+        </div>
+        <p id="mensaje"></p>
+    </fieldset>
+
+    <script>
+    let cuerpo = document.getElementById("cuerpo");
+    let mensaje = document.getElementById("mensaje");
+
+    let datosIniciales = cuerpo.innerHTML;
+
+    function calificacion(media) {
+        if (media < 5) {
+            return "Insuficiente";
+        } else if (media < 6) {
+            return "Suficiente";
+        } else if (media < 7) {
+            return "Bien";
+        } else if (media < 9) {
+            return "Notable";
+        } else {
+            return "Sobresaliente";
+        }
+    }
+
+    function celdaNota(nota) {
+        if (nota >= 5) {
+            return '<td class="aprobado">' + nota + '</td>';
+        } else {
+            return '<td class="suspenso">' + nota + '</td>';
+        }
+    }
+
+    function anadir() {
+        let nombre = document.getElementById("nombre").value.trim();
+        let t1 = parseFloat(document.getElementById("t1").value);
+        let t2 = parseFloat(document.getElementById("t2").value);
+        let t3 = parseFloat(document.getElementById("t3").value);
+
+        if (nombre == "" || isNaN(t1) || isNaN(t2) || isNaN(t3)) {
+            mensaje.textContent = "Rellena el nombre y las tres notas.";
+            return;
+        }
+        if (t1 < 0 || t1 > 10 || t2 < 0 || t2 > 10 || t3 < 0 || t3 > 10) {
+            mensaje.textContent = "Las notas tienen que estar entre 0 y 10.";
+            return;
+        }
+
+        let media = (t1 + t2 + t3) / 3;
+        let fila = document.createElement("tr");
+        fila.innerHTML = "<td>" + nombre + "</td>" + celdaNota(t1) + celdaNota(t2) + celdaNota(t3) + "<th>" + media.toFixed(2) + "</th><td>" + calificacion(media) + "</td>";
+        cuerpo.appendChild(fila);
+
+        mensaje.textContent = "Añadido " + nombre + ". Ahora hay " + cuerpo.rows.length + " alumnos.";
+
+        document.getElementById("nombre").value = "";
+        document.getElementById("t1").value = "";
+        document.getElementById("t2").value = "";
+        document.getElementById("t3").value = "";
+    }
+
+    function reiniciar() {
+        cuerpo.innerHTML = datosIniciales;
+        mensaje.textContent = "";
+    }
+
+    document.getElementById("btnAnadir").addEventListener("click", anadir);
+    document.getElementById("btnReset").addEventListener("click", reiniciar);
+</script>
+</body>
+</html>
