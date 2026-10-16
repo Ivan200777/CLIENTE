@@ -2,31 +2,100 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mis ejercicios de Cliente</title>
 <style>
   body {
+    margin: 0;
     font-family: sans-serif;
+    background: #eef2f7;
+    color: #1f2937;
+  }
+
+  main {
     max-width: 700px;
-    margin: 40px auto;
-    padding: 0 20px;
+    margin: 0 auto;
+    padding: 40px 20px;
+  }
+
+  h1 {
+    margin: 0 0 6px;
+    color: #004d98;
+  }
+
+  p {
+    margin: 0 0 24px;
+    color: #6b7280;
+  }
+
+  .caja {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
   }
 
   input {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
+    box-sizing: border-box;
+    padding: 14px 18px;
+    border: none;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 16px;
+    outline: none;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  ul ul {
+    padding-left: 20px;
+    background: #f9fafb;
   }
 
   li {
-    margin-bottom: 8px;
+    border-top: 1px solid #e5e7eb;
+  }
+
+  summary {
+    padding: 12px 18px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #004d98;
+  }
+
+  summary:hover,
+  a:hover {
+    background: #e8f0fb;
+  }
+
+  a {
+    display: block;
+    padding: 12px 18px;
+    color: #1f2937;
+    text-decoration: none;
+  }
+
+  .vacio {
+    padding: 20px 18px;
+    margin: 0;
   }
 </style>
 </head>
 <body>
 
-<h1>Mis ejercicios de Cliente</h1>
-<input id="buscar" type="search" placeholder="Buscar archivo">
-<ul id="lista"></ul>
+<main>
+  <h1>Mis ejercicios de Cliente</h1>
+  <p>Elige un archivo para abrirlo.</p>
+
+  <div class="caja">
+    <input id="buscar" type="search" placeholder="Buscar archivo">
+    <div id="lista"></div>
+  </div>
+</main>
 
 <script>
   const usuario = "Ivan200777";
@@ -35,15 +104,64 @@
   const buscar = document.getElementById("buscar");
   let archivos = [];
 
+  function crearArbol(rutas) {
+    const raiz = { carpetas: {}, archivos: [] };
+
+    for (const ruta of rutas) {
+      const partes = ruta.split("/");
+      let nodo = raiz;
+
+      for (let i = 0; i < partes.length - 1; i++) {
+        if (!nodo.carpetas[partes[i]]) {
+          nodo.carpetas[partes[i]] = { carpetas: {}, archivos: [] };
+        }
+        nodo = nodo.carpetas[partes[i]];
+      }
+
+      nodo.archivos.push(ruta);
+    }
+
+    return raiz;
+  }
+
+  function crearLista(nodo, abierto) {
+    const ul = document.createElement("ul");
+
+    for (const nombre in nodo.carpetas) {
+      const li = document.createElement("li");
+      const details = document.createElement("details");
+      const summary = document.createElement("summary");
+
+      details.open = abierto;
+      summary.textContent = "📁 " + nombre;
+      details.append(summary, crearLista(nodo.carpetas[nombre], abierto));
+      li.append(details);
+      ul.append(li);
+    }
+
+    for (const ruta of nodo.archivos) {
+      const li = document.createElement("li");
+      const a = document.createElement("a");
+
+      a.href = encodeURI(ruta);
+      a.textContent = "📄 " + ruta.split("/").pop();
+      li.append(a);
+      ul.append(li);
+    }
+
+    return ul;
+  }
+
   function mostrar() {
     const texto = buscar.value.toLowerCase();
-    lista.innerHTML = "";
+    const filtrados = archivos.filter(ruta => ruta.toLowerCase().includes(texto));
 
-    for (const ruta of archivos) {
-      if (ruta.toLowerCase().includes(texto)) {
-        lista.innerHTML += `<li><a href="${encodeURI(ruta)}">${ruta}</a></li>`;
-      }
+    if (filtrados.length === 0) {
+      lista.innerHTML = '<p class="vacio">No hay archivos.</p>';
+      return;
     }
+
+    lista.replaceChildren(crearLista(crearArbol(filtrados), texto !== ""));
   }
 
   fetch(`https://api.github.com/repos/${usuario}/${repo}/git/trees/main?recursive=1`)
@@ -52,12 +170,17 @@
       archivos = datos.tree
         .filter(f => f.type === "blob")
         .map(f => f.path)
-        .filter(p => p.endsWith(".html") && p !== "index.html");
+        .filter(p => p !== "index.html" && !p.startsWith("img/"))
+        .filter(p => p.endsWith(".html") || p.endsWith(".pdf"));
       mostrar();
+    })
+    .catch(() => {
+      lista.innerHTML = '<p class="vacio">No se pudo cargar la lista.</p>';
     });
 
   buscar.addEventListener("input", mostrar);
 </script>
 
 </body>
+</html>
 </html>
