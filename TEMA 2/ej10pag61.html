@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Rombo hueco</title>
+</head>
+<h1>ROMBO</h1>
+<body>
+    <input type="number" id="numero" placeholder="Número de filas (impar)">
+    <button onclick="dibujar()">Dibujar</button>
+    <pre id="rombo"></pre>
+
+    <script>
+        function dibujar() {
+            let filas = parseInt(document.getElementById("numero").value);
+
+            if (filas % 2 == 0) {
+                filas++;
+            }
+
+            let medio = (filas - 1) / 2;
+            let texto = "";
+
+            for (let i = 0; i < filas; i++) {
+                let d;
+
+                if (i <= medio) {
+                    d = i;
+                } else {
+                    d = filas - 1 - i;
+                }
+
+                let linea = "";
+
+                for (let j = 0; j < medio - d; j++) {
+                    linea += " ";
+                }
+
+                linea += "*";
+
+                if (d > 0) {
+                    for (let j = 0; j < 2 * d - 1; j++) {
+                        linea += " ";
+                    }
+                    linea += "*";
+                }
+
+                texto += linea + "\n";
+            }
+
+            document.getElementById("rombo").textContent = texto;
+        }
+    </script>
+</body>
+</html>
