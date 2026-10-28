@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Cookie de idioma</title>
+</head>
+<body>
+
+<script>
+
+    //Creo la cookie
+    document.cookie = "idioma=es; max-age=604800; path=/";
+
+    //Leo la cookie
+    function leerCookie() {
+        console.log(document.cookie);
+    }
+
+    leerCookie();
+
+    //Borro la cookie
+    document.cookie = "idioma=; max-age=0; path=/";
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Días faltan</title>
+</head>
+<body>
+    
+</body>
+<script>
+    const cumpleanos = new Date(2027, 2, 14);
+
+    const dias = Math.ceil(
+    (cumpleanos - new Date()) / 86400000
+    );
+
+    console.log(
+        "Faltan " + dias + " días para mi cumpleaños"
+    );
+</script>
+</html>

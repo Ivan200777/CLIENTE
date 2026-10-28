@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Tema</title>
+</head>
+<body>
+
+    <h1 id="tema"></h1>
+
+    <script>
+
+        function cambiarTema() {
+
+            let tema = localStorage.getItem("tema");
+
+            if (tema === null) {
+                tema = "claro";
+            } else if (tema === "claro") {
+                tema = "oscuro";
+            } else {
+                tema = "claro";
+            }
+
+            localStorage.setItem("tema", tema);
+
+            document.getElementById("tema").textContent = tema;
+        }
+
+        cambiarTema();
+
+    </script>
+
+</body>
+</html>

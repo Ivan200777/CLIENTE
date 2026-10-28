@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de tareas</title>
+</head>
+<body>
+
+    <script>
+
+        function anadirTarea(texto) {
+
+            let tareas = JSON.parse(localStorage.getItem("tareas"));
+
+            if (tareas === null) {
+                tareas = [];
+            }
+
+            tareas.push(texto);
+
+            localStorage.setItem("tareas", JSON.stringify(tareas));
+        }
+
+        function verTareas() {
+
+            let tareas = JSON.parse(localStorage.getItem("tareas"));
+
+            if (tareas === null) {
+                tareas = [];
+            }
+
+            console.log(tareas);
+        }
+
+        anadirTarea("Estudiar JavaScript");
+        anadirTarea("Hacer ejercicios");
+        verTareas();
+
+    </script>
+
+</body>
+</html>
