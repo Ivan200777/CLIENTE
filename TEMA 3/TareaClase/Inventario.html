@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario</title>
+</head>
+<body>
+    <script>
+    const productos = [
+        { nombre: "Fifa 19", precio: 10, stock: 3 },
+        { nombre: "Minecraft", precio: 35, stock: 8 },
+        { nombre: "Rocket League", precio: 2, stock: 4 },
+        { nombre: "2K26", precio: 30, stock: 10 }
+    ];
+
+    let total = 0;
+
+    for (let i = 0; i < productos.length; i++) {
+
+        if (productos[i].stock < 5) {
+            console.log(productos[i].nombre);
+        }
+
+        total += productos[i].precio * productos[i].stock;
+    }
+
+    console.log("Valor total del inventario: " + total + " €");
+
+    </script>
+</body>
+</html>
